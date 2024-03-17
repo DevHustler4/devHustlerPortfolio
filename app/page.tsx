@@ -131,6 +131,7 @@ export default function Home() {
               </motion.span>
             ))}
           </motion.span>
+
           <motion.h1 className=" font-bold text-7xl leading-tight bg-gradient-to-br from-[#0e00e7] to-[#e5e7e7] text-center w-2/3 bg-clip-text text-transparent">
             {text2.map((el, i) => (
               <motion.span
@@ -148,7 +149,9 @@ export default function Home() {
               </motion.span>
             ))}
             <br />{" "}
-            <TypingText texts={["Next.js 14", "Express.js", "Mongodb" ,"Node.js","Html"]} />
+            <TypingText
+              texts={["Next.js 14", "Express.js", "Mongodb", "Node.js", "Html"]}
+            />
           </motion.h1>
           <MdOutlineKeyboardDoubleArrowDown className="size-24" />
         </motion.section>
