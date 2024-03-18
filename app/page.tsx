@@ -163,14 +163,13 @@ export default function Home() {
         <div className="flex flex-col gap-5 w-2/4">
           <h1 className="text-5xl font-semibold text-[#aaa7e9]">About Us</h1>
           <p className="text-lg text-[#a4d8e9] leading-relaxed">
-            Hi there! Im [Your Name], a passionate and experienced Next.js web
-            developer based in [Your Location]. With a background in [Your
-            Background or Expertise], I specialize in creating modern and
-            responsive websites and web applications using the latest
-            technologies.s
+            Hi there! Im Monu, a passionate and experienced Next.js web
+            developer based in India. With a background in [Your Background or
+            Expertise], I specialize in creating modern and responsive websites
+            and web applications using the latest technologies.s
           </p>
           <p className="text-lg text-[#a4d8e9] leading-relaxed">
-            I have a strong foundation in [Your Skills], and Im dedicated to
+            I have a strong foundation in React.js, and Im dedicated to
             delivering high-quality work that exceeds client expectations.
             Whether its building dynamic user interfaces, optimizing website
             performance, or solving complex technical challenges, Im committed
