@@ -1,16 +1,26 @@
 "use client";
 import Image from "next/image";
 import { MdOutlineKeyboardDoubleArrowDown } from "react-icons/md";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
 import { debounce } from "lodash";
 import { PiCursorClickFill } from "react-icons/pi";
+import RunningText from "@/components/runningtext";
 export default function Home() {
+  const ref = useRef(null);
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
     x: 0,
     y: 0,
   });
-
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["0.8 0", "1 1"],
+  });
+  //first value is 0 second is 1
+  const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+  const image = useTransform(scrollYProgress, [0, 1], ["-0%", "-140%"]);
+  const section = useTransform(scrollYProgress, [0, 1], ["0%", "140%"]);
+  // console.log(scale);
   const [cursorVariant, setCursorVariant] = useState("default");
 
   useEffect(() => {
@@ -30,7 +40,12 @@ export default function Home() {
 
   const text = "Here Creativity Meets Functionality.".split(" ");
   const text2 = "Crafting Seamless Digital Experiences With".split(" ");
-
+  const handledown = () => {
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: "smooth",
+    });
+  };
   const containerVariants = {
     hidden: {},
     visible: {
@@ -81,23 +96,34 @@ export default function Home() {
       </motion.div>
       {/* Hero Section */}
       <motion.main
+        ref={ref}
         variants={containerVariants}
         className="min-h-screen min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c]"
       >
-        <motion.div className="min-w-screen h-20 flex justify-between px-8 items-center">
+        <motion.div
+          transition={{ staggerChildren: 2 }}
+          className="min-w-screen h-20 flex justify-between px-8 items-center"
+        >
           <motion.div
-            initial="hidden"
-            variants={myvariants}
-            animate="visible"
+            initial={{ opacity: 0, x: -150 }}
+            animate={{
+              opacity: 1,
+              x: 0,
+              transition: {
+                type: "spring",
+                stiffness: 225,
+                duration: 0.4,
+              },
+            }}
             className="flex justify-center items-center gap-3"
           >
             <Image src="/dev 1.png" alt="My Logo" width={40} height={40} />
-            <h1 className="text-xl">Dev Hustler</h1>
+            <h1 className="text-xl text-white">Dev Hustler</h1>
           </motion.div>
           <motion.ul className="flex gap-5">
             {["About", "Services", "Skills", "Projects"].map((d, index) => (
               <motion.li
-                className="text-lg hover:text-[#aaa7e9] hover:font-semibold"
+                className="text-lg text-white hover:text-[#aaa7e9] hover:font-semibold"
                 key={d}
                 initial="hidden"
                 variants={livariants}
@@ -145,6 +171,7 @@ export default function Home() {
           </motion.div>
         </motion.div>
         <motion.section
+          style={{ scale: scale }}
           transition={{ staggerChildren: 0.4 }}
           className="flex items-center flex-col justify-center mt-16 gap-2"
         >
@@ -164,28 +191,36 @@ export default function Home() {
             ))}
           </motion.span>
 
-          <motion.h1 className=" font-bold text-7xl leading-tight bg-gradient-to-br from-[#0e00e7] to-[#e5e7e7] text-center w-2/3 bg-clip-text text-transparent">
+          <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: 0.2,
+              type: "spring",
+              stiffness: 221,
+            }}
+            className=" font-bold text-7xl leading-tight bg-gradient-to-br from-[#0e00e7] to-[#e5e7e7] text-center w-2/3 bg-clip-text text-transparent"
+          >
             {text2.map((el, i) => (
-              <motion.span
-                initial={{ opacity: 0, y: -100 }}
-                animate={{ opacity: 1, x: 222 }}
-                transition={{
-                  duration: 1.2,
-                  type: "spring",
-                  stiffness: 221,
-                  delay: i * 0.4,
-                }}
-                key={i}
-              >
-                {el}{" "}
-              </motion.span>
+              <motion.span key={i}>{el} </motion.span>
             ))}
             <br />{" "}
             <TypingText
               texts={["Next.js 14", "Express.js", "Mongodb", "Node.js", "Html"]}
             />
-          </motion.h1>
-          <div
+          </motion.div>
+          <motion.div
+            onClick={() => handledown()}
+            initial={{ scale: 0, y: -100 }}
+            animate={{
+              scale: 1,
+              y: 0,
+              transition: {
+                type: "spring",
+                stiffness: 220,
+                duration: 0.5,
+              },
+            }}
             onMouseEnter={() => {
               setCursorVariant("link");
             }}
@@ -195,15 +230,21 @@ export default function Home() {
             className="mt-8 w-12 h-20 ring-2 ring-[#aaa7e9] rounded-3xl flex justify-center items-end pb-4"
           >
             <MdOutlineKeyboardDoubleArrowDown className="size-8 animate-bounce text-[#81a9ff] " />
-          </div>
+          </motion.div>
         </motion.section>
       </motion.main>
 
       {/* About me Section */}
-      <section className="min-h-[100vh] flex justify-around items-center min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c]">
+      <section
+      style={{ overflowX: 'hidden' }}
+        id="about-me-section"
+        className="min-h-[100vh] flex justify-around items-center min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c]"
+      >
         <motion.div
+          style={{ x: image }}
           initial={{ scale: 1 }}
-          animate={{ opacity: 1, y: 20 }}
+          whileInView={{ y: 20 }}
+          viewport={{ once: true, amount: 0.5 }}
           transition={{
             duration: 1,
             repeat: Infinity,
@@ -213,7 +254,8 @@ export default function Home() {
           <div className="relative">
             <motion.div
               className="absolute inset-0 rounded-full shadow-lg shadow-blue-700"
-              animate={{ rotate: 360 }}
+              whileInView={{ rotate: 360 }}
+              viewport={{ once: true, amount: 0.6 }}
               transition={{
                 duration: 1.5,
                 repeat: Infinity,
@@ -229,38 +271,61 @@ export default function Home() {
           </div>
         </motion.div>
 
-        <div className="flex flex-col gap-10 w-2/4">
-          <h1 className="text-5xl font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent">
+        <motion.div style={{ x: section }} className="flex flex-col gap-16 w-2/4">
+          <motion.h1
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1, rotate: [40, -40, 0] }}
+            viewport={{ once: true, amount: 1 }}
+            className="text-5xl ml-[55] font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
+          >
             About Us
-          </h1>
+          </motion.h1>
           <div className="flex flex-col gap-3">
             {aboutme.map((item, index) => (
-              <motion.p
-                initial={{ opacity: 0, x: 150 }}
-                animate={{
+              <motion.div
+                initial={{ opacity: 0, x: -150 }}
+                whileInView={{
                   opacity: 1,
                   x: 0,
                   transition: {
                     type: "spring",
                     stiffness: 220,
                     duration: 0.5,
-                    delay: 1 * index + 1,
-                    staggerChildren: 1,
+                    delay: 1 * index,
+                    staggerChildren: 0.5,
                   },
                 }}
+                viewport={{ once: true, amount: 0.5 }}
                 key={index}
                 className="text-lg text-[#a4d8e9] leading-relaxed"
               >
-                <div className="flex items-center justify-center gap-6">
-                  <div className="flex items-center justify-center text-xl px-4 py-2 rounded-full text-white bg-blue-600">
+                <div className="flex justify-center items-center gap-5">
+                  <motion.span
+                    initial={{
+                      boxShadow: "0px 0px 4px 4px rgba(37, 99, 235, 1)",
+                    }}
+                    animate={{
+                      boxShadow: "0px 0px 1px 1px rgba(37, 99, 235, 1)",
+                    }}
+                    transition={{
+                      duration: 0.6,
+                      ease: "easeIn",
+                      repeat: Infinity,
+                    }}
+                    className="flex items-center justify-center text-xl px-4 py-2 rounded-full text-white bg-blue-600"
+                  >
                     {index + 1}
-                  </div>{" "}
+                  </motion.span>{" "}
                   {item}
                 </div>
-              </motion.p>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
+      </section>
+      <section id="skills-section" className="h-screen min-w-screen">
+        skill
+        <RunningText/>
       </section>
     </>
   );
