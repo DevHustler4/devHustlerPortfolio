@@ -1,33 +1,25 @@
-// components/RunningText.js
 import { motion } from "framer-motion";
 
-const textVariants = {
-  initial: { x: "-100%" },
-  animate: {
-    x: "100%",
-    transition: {
-      duration: 10, // Adjust the duration as per your preference
-      ease: "linear",
-      repeat: Infinity,
-    },
-  },
-};
-
-const RunningText = () => {
+const runningtext = () => {
   return (
-    <div style={{ overflow: "hidden", whiteSpace: "nowrap" }}>
+    <div className="overflow-hidden">
       <motion.div
-        variants={textVariants}
-        initial="initial"
-        animate="animate"
-        style={{ display: "inline-block" }}
-        className="text-3xl text-white"
+        initial={{ x: "100%" }}
+        animate={{ x: "-200%" }}
+        transition={{
+          duration: 35,
+          ease: "linear",
+          repeat: Infinity,
+        }}
+        className="whitespace-nowrap text-transparent text-5xl z-20 font-semibold"
+        style={{ WebkitTextStroke: "1px #aaa7e9" }}
       >
-        Hey, I am Monu kumArHow are sjehdd hwshsndjbje bwgj jhxyudcbe bhsbhw
-        sbjw
+        Crafting Seamless Digital Experiences With Crafting Seamless Digital.
+        Experiences With Crafting Seamless Digital Experiences With.Digital
+        Experiences With Crafting Seamless Digital Experiences With.
       </motion.div>
     </div>
   );
 };
 
-export default RunningText;
+export default runningtext;

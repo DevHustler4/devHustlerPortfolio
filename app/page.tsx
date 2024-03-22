@@ -3,24 +3,34 @@ import Image from "next/image";
 import { MdOutlineKeyboardDoubleArrowDown } from "react-icons/md";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
+import VanillaTilt from "vanilla-tilt";
 import { debounce } from "lodash";
 import { PiCursorClickFill } from "react-icons/pi";
-import RunningText from "@/components/runningtext";
 export default function Home() {
   const ref = useRef(null);
+  const aboutref = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
     x: 0,
     y: 0,
   });
+  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["0.8 0", "1 1"],
+  });
+  const { scrollYProgress: y } = useScroll({
+    target: aboutref,
+    offset: ["0 0", "1 0"],
   });
   //first value is 0 second is 1
   const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
   const image = useTransform(scrollYProgress, [0, 1], ["-0%", "-140%"]);
   const section = useTransform(scrollYProgress, [0, 1], ["0%", "140%"]);
+  const x = useTransform(y, [0, 1], ["-0%", "-100%"]);
+  const xfor = useTransform(y, [0, 1], ["-100%", "-0%"]);
   // console.log(scale);
+  // console.log(x);
   const [cursorVariant, setCursorVariant] = useState("default");
 
   useEffect(() => {
@@ -40,6 +50,11 @@ export default function Home() {
 
   const text = "Here Creativity Meets Functionality.".split(" ");
   const text2 = "Crafting Seamless Digital Experiences With".split(" ");
+  const slidetext =
+    "Crafting Seamless Digital Experiences With Next.js Crafting Seamless Digital Experiences With Crafting Tailwind Css.Crafting Seamless Digital Experiences With Mongodb. Seamless DigitalExperiences With Html 5".split(
+      " "
+    );
+
   const handledown = () => {
     window.scrollTo({
       top: window.innerHeight,
@@ -67,6 +82,89 @@ export default function Home() {
     " I have a strong foundation in React.js, and I'm dedicated to delivering high-quality work that exceeds client expectations. I'm committed to achieving results that drive business success.",
     "Outside of coding, you can find me UX/UI. Im always eager to learn and explore new technologies and trends in web development, and I'm excited about the opportunity to collaborate on innovative projects that make a positive impact.",
   ];
+  const images = [
+    "/html.png",
+    "/csslogo.png",
+    "/tailwind.png",
+    "/js.png",
+    "/ts.png",
+    "/mongodb.png",
+    "/node.png",
+    "/express.png",
+    "/react.png",
+    "/nextlogo.png",
+  ];
+
+  useEffect(() => {
+    cardRefs.current.forEach((ref) => {
+      if (ref) {
+        VanillaTilt.init(ref, {
+          max: 25,
+          speed: 400,
+          glare: true,
+          "max-glare": 0.6,
+        });
+      }
+    });
+  }, []);
+
+  const services = [
+    {
+      title: "E-commerce Website Development",
+      description: "Creating online stores that convert.",
+      features: [
+        "Customized Shopping Cart",
+        "Seamless Checkout Experience",
+        "Product Recommendation Engine",
+      ],
+    },
+    {
+      title: "Portfolio Website Development",
+      description: "Showcasing your work in style.",
+      features: [
+        "Stunning Visual Design",
+        "Easy-to-update Portfolio Sections",
+        "Integration with Social Media Platforms",
+      ],
+    },
+    {
+      title: "Real Estate Website Development",
+      description: "Empowering real estate professionals online.",
+      features: [
+        "Property Listings Management",
+        "Virtual Tour Integration",
+        "Lead Generation Forms",
+      ],
+    },
+    {
+      title: "Event Management Website Development",
+      description: "Bringing events to life on the web.",
+      features: [
+        "Event Calendar Integration",
+        "Ticket Booking System",
+        "Social Media Integration for Promotion",
+      ],
+    },
+    {
+      title: "Educational Website Development",
+      description: "Empowering educators and learners online.",
+      features: [
+        "Learning Management System (LMS)",
+        "Course Enrollment and Progress Tracking",
+        "Interactive Quizzes and Assessments",
+      ],
+    },
+    {
+      title: "Blogging Platform Development",
+      description: "Sharing your ideas with the world.",
+      features: [
+        "User-Friendly Content Management System",
+        "SEO-Optimized Blog Posts",
+        "Social Sharing Integration",
+      ],
+    },
+  ];
+
   return (
     <>
       <motion.div
@@ -191,18 +289,19 @@ export default function Home() {
             ))}
           </motion.span>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              duration: 0.2,
-              type: "spring",
-              stiffness: 221,
-            }}
-            className=" font-bold text-7xl leading-tight bg-gradient-to-br from-[#0e00e7] to-[#e5e7e7] text-center w-2/3 bg-clip-text text-transparent"
-          >
+          <motion.div className=" font-bold text-7xl leading-tight bg-gradient-to-br from-[#0e00e7] to-[#e5e7e7] text-center w-2/3 bg-clip-text text-transparent">
             {text2.map((el, i) => (
-              <motion.span key={i}>{el} </motion.span>
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{
+                  duration: 0.5,
+                  delay: i * 0.2,
+                }}
+                key={i}
+              >
+                {el}{" "}
+              </motion.span>
             ))}
             <br />{" "}
             <TypingText
@@ -235,8 +334,8 @@ export default function Home() {
       </motion.main>
 
       {/* About me Section */}
-      <section
-      style={{ overflowX: 'hidden' }}
+      <div
+        style={{ overflowX: "hidden" }}
         id="about-me-section"
         className="min-h-[100vh] flex justify-around items-center min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c]"
       >
@@ -271,7 +370,10 @@ export default function Home() {
           </div>
         </motion.div>
 
-        <motion.div style={{ x: section }} className="flex flex-col gap-16 w-2/4">
+        <motion.div
+          style={{ x: section }}
+          className="flex flex-col gap-16 w-2/4"
+        >
           <motion.h1
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1, rotate: [40, -40, 0] }}
@@ -322,15 +424,124 @@ export default function Home() {
             ))}
           </div>
         </motion.div>
-      </section>
-      <section id="skills-section" className="h-screen min-w-screen">
-        skill
-        <RunningText/>
-      </section>
+      </div>
+      {/* Skill section */}
+      <div
+        id="skills-section"
+        className="h-screen min-w-screen overflow-hidden"
+      >
+        <div className="overflow-hidden">
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: "-200%" }}
+            transition={{
+              duration: 35,
+              ease: "linear",
+              repeat: Infinity,
+            }}
+            className="whitespace-nowrap text-transparent flex gap-1  text-5xl z-20 font-bold"
+            style={{ WebkitTextStroke: "1px #aaa7e9" }}
+          >
+            {slidetext.map((item, index) => (
+              <h1
+                onMouseEnter={() => {
+                  setCursorVariant("link");
+                }}
+                onMouseLeave={() => {
+                  setCursorVariant("default");
+                }}
+                className="hover:text-blue-400 "
+                key={index}
+              >
+                {item}
+              </h1>
+            ))}
+          </motion.div>
+        </div>
+        <div
+          ref={aboutref}
+          className="flex items-center flex-col justify-center gap-10"
+        >
+          <motion.h1
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1, rotate: [40, -40, 0] }}
+            viewport={{ once: true, amount: 1 }}
+            className="text-5xl mt-16 mx-auto font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
+          >
+            Skills And Expertise
+          </motion.h1>
+          <motion.div
+            style={{ x: x }}
+            className="flex overflow-hidden items-center justify-center flex-wrap w-1/2 gap-5"
+          >
+            {images.map((item, index) => {
+              return (
+                <div
+                  key={item}
+                  ref={(element) => (cardRefs.current[index] = element)}
+                  onMouseEnter={() => {
+                    setCursorVariant("link");
+                  }}
+                  onMouseLeave={() => {
+                    setCursorVariant("default");
+                  }}
+                  className="p-4 h-32 flex items-center justify-center"
+                  style={{
+                    boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+                    backdropFilter: "blur(13px)",
+                    WebkitBackdropFilter: "blur(13px)",
+                    borderRadius: "10px",
+                    border: "2px solid rgba(255, 255, 255, 0.18)",
+                  }}
+                >
+                  <Image src={item} width={100} height={100} alt={item} />
+                </div>
+              );
+            })}
+          </motion.div>
+        </div>
+      </div>
+      {/* services section */}
+      <div className="h-screen min-w-screen flex items-center flex-col justify-center gap-10 ">
+        <motion.h1
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1, rotate: [40, -40, 0] }}
+          viewport={{ once: true, amount: 1 }}
+          className="text-5xl mt-16 mx-auto font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
+        >
+          What I Do
+        </motion.h1>
+        <motion.div className="bg-yellow flex gap-7" style={{ x: xfor }}>
+          {services.map((item) => (
+            <div
+              key={item.title}
+              style={{
+                boxShadow:
+                  "inset 22px 22px 44px #172a30,inset -22px -22px 44px #294a56",
+              }}
+              className="p-6 w-[400px] hover:scale-105 text-[#e5e7e7] rounded-[25px] bg-[#203a43]"
+            >
+              <h1 className="text-2xl text-bold mb-3">{item.title}</h1>
+              <p className="text-base text-gray-500 mb-3">{item.description}</p>
+              <ul>
+                {item.features.map((feature) => (
+                  <li
+                    className="border-[1px]  mb-3 px-3 py-1 border-blue-300 inline-block bg-blue-950 rounded-xl text-blue-100"
+                    key={feature}
+                  >
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </motion.div>
+        {/* </div> */}
+      </div>
     </>
   );
 }
-
+// ================================================================================
 const TypingText = ({ texts }: { texts: string[] }) => {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [currentText, setCurrentText] = useState("");
