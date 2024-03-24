@@ -4,8 +4,15 @@ import { MdOutlineKeyboardDoubleArrowDown } from "react-icons/md";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import VanillaTilt from "vanilla-tilt";
+import { FaXTwitter } from "react-icons/fa6";
+import { SiUpwork } from "react-icons/si";
 import { debounce } from "lodash";
 import { PiCursorClickFill } from "react-icons/pi";
+import { FaGithub } from "react-icons/fa6";
+import { IoLogoInstagram } from "react-icons/io";
+import { TbBrandFiverr } from "react-icons/tb";
+import { FaLinkedinIn } from "react-icons/fa6";
+import { EmailSend } from "@/components/sendemail";
 export default function Home() {
   const ref = useRef(null);
   const aboutref = useRef<HTMLDivElement>(null);
@@ -29,8 +36,6 @@ export default function Home() {
   const section = useTransform(scrollYProgress, [0, 1], ["0%", "140%"]);
   const x = useTransform(y, [0, 1], ["-0%", "-100%"]);
   const xfor = useTransform(y, [0, 1], ["-100%", "-0%"]);
-  // console.log(scale);
-  // console.log(x);
   const [cursorVariant, setCursorVariant] = useState("default");
 
   useEffect(() => {
@@ -112,6 +117,7 @@ export default function Home() {
     {
       title: "E-commerce Website Development",
       description: "Creating online stores that convert.",
+      image: "/ecommerce.jpg",
       features: [
         "Customized Shopping Cart",
         "Seamless Checkout Experience",
@@ -121,6 +127,7 @@ export default function Home() {
     {
       title: "Portfolio Website Development",
       description: "Showcasing your work in style.",
+      image: "/portfolio.jpg",
       features: [
         "Stunning Visual Design",
         "Easy-to-update Portfolio Sections",
@@ -130,6 +137,7 @@ export default function Home() {
     {
       title: "Real Estate Website Development",
       description: "Empowering real estate professionals online.",
+      image: "/realestate.jpg",
       features: [
         "Property Listings Management",
         "Virtual Tour Integration",
@@ -137,8 +145,9 @@ export default function Home() {
       ],
     },
     {
-      title: "Event Management Website Development",
-      description: "Bringing events to life on the web.",
+      title: "Food Delivery Website Development",
+      description: "Go your food to every house of your city .",
+      image: "/food.jpg",
       features: [
         "Event Calendar Integration",
         "Ticket Booking System",
@@ -148,6 +157,7 @@ export default function Home() {
     {
       title: "Educational Website Development",
       description: "Empowering educators and learners online.",
+      image: "/eductional.jpg",
       features: [
         "Learning Management System (LMS)",
         "Course Enrollment and Progress Tracking",
@@ -155,8 +165,20 @@ export default function Home() {
       ],
     },
     {
+      title: "Convert Figma Designs to Web Applications",
+      description:
+        "Transform your Figma designs into fully functional web applications with precision and efficiency.",
+      image: "/figma",
+      features: [
+        "Pixel-Perfect Implementation",
+        "Responsive Design",
+        "Cross-Browser Compatibility",
+      ],
+    },
+    {
       title: "Blogging Platform Development",
       description: "Sharing your ideas with the world.",
+      image: "/blogging.jpg",
       features: [
         "User-Friendly Content Management System",
         "SEO-Optimized Blog Posts",
@@ -200,7 +222,7 @@ export default function Home() {
       >
         <motion.div
           transition={{ staggerChildren: 2 }}
-          className="min-w-screen h-20 flex justify-between px-8 items-center"
+          className="min-w-screen h-20 overflow-hidden flex justify-between px-8 items-center"
         >
           <motion.div
             initial={{ opacity: 0, x: -150 }}
@@ -428,7 +450,7 @@ export default function Home() {
       {/* Skill section */}
       <div
         id="skills-section"
-        className="h-screen min-w-screen overflow-hidden"
+        className="h-screen min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c] overflow-hidden"
       >
         <div className="overflow-hidden">
           <motion.div
@@ -502,42 +524,96 @@ export default function Home() {
         </div>
       </div>
       {/* services section */}
-      <div className="h-screen min-w-screen flex items-center flex-col justify-center gap-10 ">
+      <div className="h-screen bg-gradient-to-r from-[#203a43] to-[#070b0c] min-w-screen flex overflow-hidden items-center flex-col justify-center gap-10 ">
         <motion.h1
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1, rotate: [40, -40, 0] }}
           viewport={{ once: true, amount: 1 }}
-          className="text-5xl mt-16 mx-auto font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
+          className="text-5xl mt-6 mx-auto font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
         >
           What I Do
         </motion.h1>
-        <motion.div className="bg-yellow flex gap-7" style={{ x: xfor }}>
+        <motion.div className="bg-yellow flex gap-8" style={{ x: xfor }}>
           {services.map((item) => (
-            <div
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              transition={{
+                duration: 0.2,
+              }}
               key={item.title}
               style={{
-                boxShadow:
-                  "inset 22px 22px 44px #172a30,inset -22px -22px 44px #294a56",
+                boxShadow: "6px 6px 12px #2c2a52, -6px -6px 12px #b2a8ff",
               }}
-              className="p-6 w-[400px] hover:scale-105 text-[#e5e7e7] rounded-[25px] bg-[#203a43]"
+              className="w-[300px] text-black rounded-[30px] bg-[#6f69cd]"
             >
-              <h1 className="text-2xl text-bold mb-3">{item.title}</h1>
-              <p className="text-base text-gray-500 mb-3">{item.description}</p>
+              <Image
+                src={item.image}
+                alt="img"
+                height={40}
+                width={100}
+                className="w-[300px] h-48 rounded-t-[25px]"
+              />
+              <h1 className="px-3 text-xl text-bold mb-3">{item.title}</h1>
+              <p className="px-3 text-sm text-slate-800 mb-3">{item.description}</p>
               <ul>
                 {item.features.map((feature) => (
                   <li
-                    className="border-[1px]  mb-3 px-3 py-1 border-blue-300 inline-block bg-blue-950 rounded-xl text-blue-100"
+                    className="mx-3 border-[1px] text-sm  mb-3 px-3 py-1 border-slate-800 inline-block bg-[#625cb6] rounded-lg text-slate-900"
                     key={feature}
                   >
                     {feature}
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
           ))}
         </motion.div>
         {/* </div> */}
       </div>
+      {/* Contact me section */}
+      <div className="h-screen min-w-screen flex-col bg-gradient-to-r from-[#203a43] to-[#070b0c] flex overflow-hidden items-center justify-center gap-10 ">
+        <div>
+          <motion.h1
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1, rotate: [40, -40, 0] }}
+            viewport={{ once: true, amount: 1 }}
+            className="text-5xl mt-6 font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
+          >
+            Contact Me
+          </motion.h1>
+        </div>
+        <EmailSend />
+      </div>
+      {/* footer section */}
+      <footer className="min-w-screen h-14 flex items-center px-6 justify-between bg-[#6f69cd]">
+        <div className="font-bold">Dev Hustler</div>
+        <p className="font-medium ml-11">
+          &copy; 2024 Your Name. All rights reserved.
+        </p>
+        <div className="flex gap-3">
+          {[
+            <FaXTwitter key="twitter" />,
+            <IoLogoInstagram key="instagram" />,
+            <FaLinkedinIn key="linkedin" />,
+            <TbBrandFiverr key="fiverr" />,
+            <FaGithub key="github" />,
+            <SiUpwork key="upwork" />,
+          ].map((item, index) => (
+            <div
+              className="ring-1 ring-black p-2 rounded-full hover:bg-[#203a43] font-bold hover:ring-0"
+              onMouseEnter={() => {
+                setCursorVariant("link");
+              }}
+              onMouseLeave={() => {
+                setCursorVariant("default");
+              }}
+              key={index}
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      </footer>
     </>
   );
 }
