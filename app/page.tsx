@@ -1,4 +1,5 @@
 "use client";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Image from "next/image";
 import { MdOutlineKeyboardDoubleArrowDown } from "react-icons/md";
 import {
@@ -6,8 +7,16 @@ import {
   useScroll,
   useTransform,
   AnimatePresence,
+  useSpring,
 } from "framer-motion";
-import { useEffect, useState, useRef } from "react";
+import { ResizeObserver } from "resize-observer";
+import {
+  useEffect,
+  useState,
+  useRef,
+  useLayoutEffect,
+  useCallback,
+} from "react";
 import VanillaTilt from "vanilla-tilt";
 import { FaXTwitter } from "react-icons/fa6";
 import { SiUpwork } from "react-icons/si";
@@ -49,8 +58,7 @@ export default function Home() {
   const section = useTransform(scrollYProgress, [0, 1], ["0%", "140%"]);
   const x = useTransform(y, [0, 1], ["-0%", "-100%"]);
   const [cursorVariant, setCursorVariant] = useState("default");
- 
-  
+
   useEffect(() => {
     const mouseMove = debounce((e: MouseEvent) => {
       setMousePosition({
@@ -188,11 +196,11 @@ export default function Home() {
       ],
     },
   ];
- 
-    const servicesx = useTransform(y, [0, 1], ["-100%", "-20%"]);
+
+  const sevicesx = useTransform(y, [0, 1], ["-100%", "-0%"]);
   return (
     <>
-    {/* cursor styling */}
+      {/* cursor styling */}
       <motion.div
         className={
           cursorVariant === "link"
@@ -451,7 +459,7 @@ export default function Home() {
         </motion.div>
       </div>
       {/* Skill section */}
-      <div className="h-[110vh] overflow-hidden min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c] ">
+      <div className="h-[100vh] overflow-hidden min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c] ">
         <motion.div
           initial={{ x: "100%" }}
           animate={{ x: "-200%" }}
@@ -528,69 +536,71 @@ export default function Home() {
         </div>
       </div>
       {/* services section */}
-      <div className="h-screen bg-gradient-to-r from-[#203a43] to-[#070b0c] min-w-screen flex overflow-hidden items-center flex-col justify-center gap-10 ">
+      <div className="h-screen bg-gradient-to-r from-[#203a43] to-[#070b0c] min-w-screen flex overflow-hidden items-center flex-col justify-center  ">
         <motion.h1
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1, rotate: [40, -40, 0] }}
           viewport={{ once: true, amount: 1 }}
-          className="text-5xl mt-6 mx-auto font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
+          className="text-5xl mb-10 font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
         >
           What I Do
         </motion.h1>
-        <motion.div className="bg-yellow flex gap-10" style={{ x: servicesx }}>
-      {services.map((item, index) => (
-        <motion.div
-          key={item.title}
-          onMouseEnter={() => setHoveredIndex(index)} // Set the hovered index on mouse enter
-          onMouseLeave={() => setHoveredIndex(-1)} // Reset the hovered index on mouse leave
-          whileHover={{ scale: 1.08 }}
-          transition={{ duration: 0.2 }}
-          style={{
-            boxShadow: "6px 6px 12px #2c2a52, -6px -6px 12px #b2a8ff",
-          }}
-          className="w-[330px] text-black rounded-[25px] bg-[#6f69cd] relative"
-        >
-          <Image
-            src={item.image}
-            alt="img"
-            height={40}
-            width={100}
-            className="w-[330px] h-52 rounded-t-[25px]"
-          />
-          <h1 className="px-3 mt-2 text-xl text-bold mb-3">{item.title}</h1>
-          <p className="px-3 text-sm text-slate-800 mb-3">
-            {item.description}
-          </p>
-          <ul className="mb-2">
-            {item.features.map((feature) => (
-              <li
-                className="mx-3 border-[1px] text-sm  mb-3 px-3 py-1 border-slate-800 inline-block bg-[#625cb6] rounded-lg text-slate-900"
-                key={feature}
+        <ScrollArea className="w-screen p-6 ">
+          <motion.div className="flex gap-8" style={{ x: sevicesx }}>
+            {services.map((item, index) => (
+              <motion.div
+                key={item.title}
+                onMouseEnter={() => setHoveredIndex(index)} // Set the hovered index on mouse enter
+                onMouseLeave={() => setHoveredIndex(-1)} // Reset the hovered index on mouse leave
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.2 }}
+                style={{
+                  boxShadow: "6px 6px 12px #2c2a52, -6px -6px 12px #b2a8ff",
+                }}
+                className="w-[300px] my-8 text-black rounded-[25px] bg-[#6f69cd] relative"
               >
-                {feature}
-              </li>
+                <Image
+                  src={item.image}
+                  alt="img"
+                  height={40}
+                  width={100}
+                  className="w-[300px] h-48 rounded-t-[25px]"
+                />
+                <h1 className="px-3 mt-2 text-xl text-bold mb-3">
+                  {item.title}
+                </h1>
+               
+                <ul className="mb-2">
+                  {item.features.map((feature) => (
+                    <li
+                      className="mx-3 border-[1px] text-sm  mb-3 px-3 py-1 border-slate-800 inline-block bg-[#625cb6] rounded-lg text-slate-900"
+                      key={feature}
+                    >
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+                {hoveredIndex === index && (
+                  <motion.div
+                    className="absolute bottom-0 left-0 right-0 h-0 bg-slate-800 rounded-[25px]"
+                    initial={{ height: 0 }}
+                    animate={{ height: "100%" }}
+                    transition={{ duration: 0.5 }}
+                    style={{ zIndex: 2 }}
+                  >
+                    <motion.button
+                      className="bg-blue-500 text-white px-4 py-2 rounded-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                      style={{ zIndex: 5 }}
+                    >
+                      View Details
+                    </motion.button>
+                  </motion.div>
+                )}
+              </motion.div>
             ))}
-          </ul>
-          {hoveredIndex === index && ( // Render the overlay only when the current card is hovered over
-            <motion.div
-              className="absolute bottom-0 left-0 right-0 h-0 bg-slate-800 rounded-[25px]"
-              initial={{ height: 0 }}
-              animate={{ height: "100%" }}
-              transition={{ duration: 0.3 }}
-              style={{ zIndex: 2 }}
-            >
-              <motion.button
-                className="bg-blue-500 text-white px-4 py-2 rounded-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                style={{ zIndex: 5 }}
-              >
-                View Details
-              </motion.button>
-            </motion.div>
-          )}
-        </motion.div>
-      ))}
-    </motion.div>
-    
+          </motion.div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </div>
       {/* Contact me section */}
       <div className="h-screen min-w-screen flex-col bg-gradient-to-r from-[#203a43] to-[#070b0c] flex overflow-hidden items-center justify-center gap-10 ">
