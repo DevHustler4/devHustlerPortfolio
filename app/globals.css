@@ -66,6 +66,21 @@
   }
 }
 
+::-webkit-scrollbar {
+  width: 8px;
+  background: #070b0c;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(106, 106, 224);
+  border-radius: 4px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: transparent;
+}
 @layer base {
   * {
     @apply border-border;

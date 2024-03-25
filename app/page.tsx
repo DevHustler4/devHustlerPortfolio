@@ -1,7 +1,12 @@
 "use client";
 import Image from "next/image";
 import { MdOutlineKeyboardDoubleArrowDown } from "react-icons/md";
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import VanillaTilt from "vanilla-tilt";
 import { FaXTwitter } from "react-icons/fa6";
@@ -16,6 +21,7 @@ import { EmailSend } from "@/components/sendemail";
 export default function Home() {
   const ref = useRef(null);
   const aboutref = useRef<HTMLDivElement>(null);
+  const aboutMeRef = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
     x: 0,
     y: 0,
@@ -30,17 +36,23 @@ export default function Home() {
     target: aboutref,
     offset: ["0 0", "1 0"],
   });
+  const { scrollYProgress: aboutMe } = useScroll({
+    target: aboutMeRef,
+    offset: ["start end", "start start"],
+  });
+  const [hoveredIndex, setHoveredIndex] = useState(-1);
+  const scaleOfAboutMe = useTransform(aboutMe, [0, 1], ["-140", "-0%"]);
+  const sectionOfAboutMe = useTransform(aboutMe, [0, 1], ["140%", "0%"]);
   //first value is 0 second is 1
   const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
   const image = useTransform(scrollYProgress, [0, 1], ["-0%", "-140%"]);
   const section = useTransform(scrollYProgress, [0, 1], ["0%", "140%"]);
   const x = useTransform(y, [0, 1], ["-0%", "-100%"]);
-  const xfor = useTransform(y, [0, 1], ["-100%", "-0%"]);
   const [cursorVariant, setCursorVariant] = useState("default");
-
+ 
+  
   useEffect(() => {
     const mouseMove = debounce((e: MouseEvent) => {
-      // Debounce mousemove event
       setMousePosition({
         x: e.clientX,
         y: e.clientY + window.scrollY,
@@ -131,7 +143,7 @@ export default function Home() {
       features: [
         "Stunning Visual Design",
         "Easy-to-update Portfolio Sections",
-        "Integration with Social Media Platforms",
+        "Integration with Social Media.",
       ],
     },
     {
@@ -151,7 +163,7 @@ export default function Home() {
       features: [
         "Event Calendar Integration",
         "Ticket Booking System",
-        "Social Media Integration for Promotion",
+        "Social Media Integration",
       ],
     },
     {
@@ -161,20 +173,10 @@ export default function Home() {
       features: [
         "Learning Management System (LMS)",
         "Course Enrollment and Progress Tracking",
-        "Interactive Quizzes and Assessments",
+        "Interactive Quizzes ",
       ],
     },
-    {
-      title: "Convert Figma Designs to Web Applications",
-      description:
-        "Transform your Figma designs into fully functional web applications with precision and efficiency.",
-      image: "/figma",
-      features: [
-        "Pixel-Perfect Implementation",
-        "Responsive Design",
-        "Cross-Browser Compatibility",
-      ],
-    },
+
     {
       title: "Blogging Platform Development",
       description: "Sharing your ideas with the world.",
@@ -186,9 +188,11 @@ export default function Home() {
       ],
     },
   ];
-
+ 
+    const servicesx = useTransform(y, [0, 1], ["-100%", "-20%"]);
   return (
     <>
+    {/* cursor styling */}
       <motion.div
         className={
           cursorVariant === "link"
@@ -235,6 +239,7 @@ export default function Home() {
                 duration: 0.4,
               },
             }}
+            viewport={{ once: true, amount: 1 }}
             className="flex justify-center items-center gap-3"
           >
             <Image src="/dev 1.png" alt="My Logo" width={40} height={40} />
@@ -354,18 +359,16 @@ export default function Home() {
           </motion.div>
         </motion.section>
       </motion.main>
-
       {/* About me Section */}
       <div
-        style={{ overflowX: "hidden" }}
-        id="about-me-section"
-        className="min-h-[100vh] flex justify-around items-center min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c]"
+        ref={aboutMeRef}
+        className="min-h-[100vh] flex justify-around overflow-hidden items-center min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c]"
       >
         <motion.div
-          style={{ x: image }}
+          style={{ x: scaleOfAboutMe }}
           initial={{ scale: 1 }}
           whileInView={{ y: 20 }}
-          viewport={{ once: true, amount: 0.5 }}
+          viewport={{ once: true, amount: 1 }}
           transition={{
             duration: 1,
             repeat: Infinity,
@@ -393,7 +396,7 @@ export default function Home() {
         </motion.div>
 
         <motion.div
-          style={{ x: section }}
+          style={{ x: sectionOfAboutMe }}
           className="flex flex-col gap-16 w-2/4"
         >
           <motion.h1
@@ -448,38 +451,33 @@ export default function Home() {
         </motion.div>
       </div>
       {/* Skill section */}
-      <div
-        id="skills-section"
-        className="h-screen min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c] overflow-hidden"
-      >
-        <div className="overflow-hidden">
-          <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: "-200%" }}
-            transition={{
-              duration: 35,
-              ease: "linear",
-              repeat: Infinity,
-            }}
-            className="whitespace-nowrap text-transparent flex gap-1  text-5xl z-20 font-bold"
-            style={{ WebkitTextStroke: "1px #aaa7e9" }}
-          >
-            {slidetext.map((item, index) => (
-              <h1
-                onMouseEnter={() => {
-                  setCursorVariant("link");
-                }}
-                onMouseLeave={() => {
-                  setCursorVariant("default");
-                }}
-                className="hover:text-blue-400 "
-                key={index}
-              >
-                {item}
-              </h1>
-            ))}
-          </motion.div>
-        </div>
+      <div className="h-[110vh] overflow-hidden min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c] ">
+        <motion.div
+          initial={{ x: "100%" }}
+          animate={{ x: "-200%" }}
+          transition={{
+            duration: 35,
+            ease: "linear",
+            repeat: Infinity,
+          }}
+          className="whitespace-nowrap text-transparent flex gap-1  text-5xl z-20 font-bold"
+          style={{ WebkitTextStroke: "1px #aaa7e9" }}
+        >
+          {slidetext.map((item, index) => (
+            <motion.h1
+              onMouseEnter={() => {
+                setCursorVariant("link");
+              }}
+              onMouseLeave={() => {
+                setCursorVariant("default");
+              }}
+              className="hover:text-blue-400 "
+              key={index}
+            >
+              {item}
+            </motion.h1>
+          ))}
+        </motion.div>
         <div
           ref={aboutref}
           className="flex items-center flex-col justify-center gap-10"
@@ -496,11 +494,16 @@ export default function Home() {
             style={{ x: x }}
             className="flex overflow-hidden items-center justify-center flex-wrap w-1/2 gap-5"
           >
-            {images.map((item, index) => {
-              return (
-                <div
+            <AnimatePresence>
+              {images.map((item, index) => (
+                <motion.div
                   key={item}
                   ref={(element) => (cardRefs.current[index] = element)}
+                  initial={{ opacity: 0, y: 100 }} // Initial state, cards start from below
+                  whileInView={{ opacity: 1, y: 0 }} // Animate to full opacity and original position
+                  transition={{ duration: 1, delay: index * 0.3 }} // Add a delay to stagger the animations
+                  exit={{ opacity: 0, y: 50 }} // Animate card out of view when it exits
+                  viewport={{ once: true, amount: 1 }}
                   onMouseEnter={() => {
                     setCursorVariant("link");
                   }}
@@ -517,10 +520,11 @@ export default function Home() {
                   }}
                 >
                   <Image src={item} width={100} height={100} alt={item} />
-                </div>
-              );
-            })}
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </motion.div>
+          ;
         </div>
       </div>
       {/* services section */}
@@ -533,42 +537,60 @@ export default function Home() {
         >
           What I Do
         </motion.h1>
-        <motion.div className="bg-yellow flex gap-8" style={{ x: xfor }}>
-          {services.map((item) => (
+        <motion.div className="bg-yellow flex gap-10" style={{ x: servicesx }}>
+      {services.map((item, index) => (
+        <motion.div
+          key={item.title}
+          onMouseEnter={() => setHoveredIndex(index)} // Set the hovered index on mouse enter
+          onMouseLeave={() => setHoveredIndex(-1)} // Reset the hovered index on mouse leave
+          whileHover={{ scale: 1.08 }}
+          transition={{ duration: 0.2 }}
+          style={{
+            boxShadow: "6px 6px 12px #2c2a52, -6px -6px 12px #b2a8ff",
+          }}
+          className="w-[330px] text-black rounded-[25px] bg-[#6f69cd] relative"
+        >
+          <Image
+            src={item.image}
+            alt="img"
+            height={40}
+            width={100}
+            className="w-[330px] h-52 rounded-t-[25px]"
+          />
+          <h1 className="px-3 mt-2 text-xl text-bold mb-3">{item.title}</h1>
+          <p className="px-3 text-sm text-slate-800 mb-3">
+            {item.description}
+          </p>
+          <ul className="mb-2">
+            {item.features.map((feature) => (
+              <li
+                className="mx-3 border-[1px] text-sm  mb-3 px-3 py-1 border-slate-800 inline-block bg-[#625cb6] rounded-lg text-slate-900"
+                key={feature}
+              >
+                {feature}
+              </li>
+            ))}
+          </ul>
+          {hoveredIndex === index && ( // Render the overlay only when the current card is hovered over
             <motion.div
-              whileHover={{ scale: 1.05 }}
-              transition={{
-                duration: 0.2,
-              }}
-              key={item.title}
-              style={{
-                boxShadow: "6px 6px 12px #2c2a52, -6px -6px 12px #b2a8ff",
-              }}
-              className="w-[300px] text-black rounded-[30px] bg-[#6f69cd]"
+              className="absolute bottom-0 left-0 right-0 h-0 bg-slate-800 rounded-[25px]"
+              initial={{ height: 0 }}
+              animate={{ height: "100%" }}
+              transition={{ duration: 0.3 }}
+              style={{ zIndex: 2 }}
             >
-              <Image
-                src={item.image}
-                alt="img"
-                height={40}
-                width={100}
-                className="w-[300px] h-48 rounded-t-[25px]"
-              />
-              <h1 className="px-3 text-xl text-bold mb-3">{item.title}</h1>
-              <p className="px-3 text-sm text-slate-800 mb-3">{item.description}</p>
-              <ul>
-                {item.features.map((feature) => (
-                  <li
-                    className="mx-3 border-[1px] text-sm  mb-3 px-3 py-1 border-slate-800 inline-block bg-[#625cb6] rounded-lg text-slate-900"
-                    key={feature}
-                  >
-                    {feature}
-                  </li>
-                ))}
-              </ul>
+              <motion.button
+                className="bg-blue-500 text-white px-4 py-2 rounded-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                style={{ zIndex: 5 }}
+              >
+                View Details
+              </motion.button>
             </motion.div>
-          ))}
+          )}
         </motion.div>
-        {/* </div> */}
+      ))}
+    </motion.div>
+    
       </div>
       {/* Contact me section */}
       <div className="h-screen min-w-screen flex-col bg-gradient-to-r from-[#203a43] to-[#070b0c] flex overflow-hidden items-center justify-center gap-10 ">
