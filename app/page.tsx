@@ -8,6 +8,7 @@ import {
   useTransform,
   AnimatePresence,
   useSpring,
+  MotionConfig,
 } from "framer-motion";
 import { ResizeObserver } from "resize-observer";
 import {
@@ -43,7 +44,7 @@ export default function Home() {
   });
   const { scrollYProgress: y } = useScroll({
     target: aboutref,
-    offset: ["0 0", "1 0"],
+    offset: ["0 0", "1 0.5"],
   });
   const { scrollYProgress: aboutMe } = useScroll({
     target: aboutMeRef,
@@ -232,9 +233,10 @@ export default function Home() {
         variants={containerVariants}
         className="min-h-screen min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c]"
       >
+        {/* navbar */}
         <motion.div
           transition={{ staggerChildren: 2 }}
-          className="min-w-screen h-20 overflow-hidden flex justify-between px-8 items-center"
+          className="min-w-screen h-20 overflow-hidden flex lg:justify-center justify-between items lg:px-8 items-center"
         >
           <motion.div
             initial={{ opacity: 0, x: -150 }}
@@ -248,12 +250,20 @@ export default function Home() {
               },
             }}
             viewport={{ once: true, amount: 1 }}
-            className="flex justify-center items-center gap-3"
+            className="flex justify-center items-center lg:gap-3"
           >
-            <Image src="/dev 1.png" alt="My Logo" width={40} height={40} />
-            <h1 className="text-xl text-white">Dev Hustler</h1>
+            <div className="scale-75">
+              <AnimatedHamburgerButton />
+            </div>
+            <div className="w-10 h-10 relative object-contain">
+              <Image src="/dev 1.png" alt="My Logo" fill={true} />
+            </div>
+            <h1 className="lg:text-xl text-lg pl-2 lg:pl-0 text-white">
+              Dev Hustler
+            </h1>
           </motion.div>
-          <motion.ul className="flex gap-5">
+
+          <motion.ul className="lg:flex gap-5 hidden ">
             {["About", "Services", "Skills", "Projects"].map((d, index) => (
               <motion.li
                 className="text-lg text-white hover:text-[#aaa7e9] hover:font-semibold"
@@ -298,17 +308,18 @@ export default function Home() {
             onMouseLeave={() => {
               setCursorVariant("default");
             }}
-            className="font-bold  text-xl bg-gradient-to-br text-[#203a43] from-[#aaa7e9] to-[#e5e7e7] rounded-md p-1 px-3"
+            className="font-bold  lg:text-xl text-lg bg-gradient-to-br text-[#203a43] from-[#aaa7e9] to-[#e5e7e7] rounded-md p-1 px-3 mr-4 lg:mr-0"
           >
             Hire Now
           </motion.div>
         </motion.div>
+        {/* main headline */}
         <motion.section
           style={{ scale: scale }}
           transition={{ staggerChildren: 0.4 }}
           className="flex items-center flex-col justify-center mt-16 gap-2"
         >
-          <motion.span className="text-2xl text-gray-400">
+          <motion.span className="lg:text-2xl text-xl text-gray-400">
             {text.map((el, i) => (
               <motion.span
                 initial={{ opacity: 0 }}
@@ -324,7 +335,7 @@ export default function Home() {
             ))}
           </motion.span>
 
-          <motion.div className=" font-bold text-7xl leading-tight bg-gradient-to-br from-[#0e00e7] to-[#e5e7e7] text-center w-2/3 bg-clip-text text-transparent">
+          <motion.div className=" font-bold lg:text-7xl text-5xl  md:text-6xl leading-tight bg-gradient-to-br from-[#0e00e7] to-[#e5e7e7] text-center lg:w-2/3 mx-2 bg-clip-text text-transparent">
             {text2.map((el, i) => (
               <motion.span
                 initial={{ opacity: 0 }}
@@ -370,9 +381,11 @@ export default function Home() {
       {/* About me Section */}
       <div
         ref={aboutMeRef}
-        className="min-h-[100vh] flex justify-around overflow-hidden items-center min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c]"
+        className="min-h-[100vh] flex flex-col lg:flex-row justify-around overflow-hidden items-center min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c]"
       >
+        {/* image */}
         <motion.div
+          className="mb-14 lg:mb-0"
           style={{ x: scaleOfAboutMe }}
           initial={{ scale: 1 }}
           whileInView={{ y: 20 }}
@@ -403,9 +416,10 @@ export default function Home() {
           </div>
         </motion.div>
 
+        {/* about me text */}
         <motion.div
           style={{ x: sectionOfAboutMe }}
-          className="flex flex-col gap-16 w-2/4"
+          className="flex mb-10 lg:mb-0 flex-col w-[80vw] justify-center items-center gap-16 lg:w-2/4"
         >
           <motion.h1
             initial={{ opacity: 0 }}
@@ -415,7 +429,7 @@ export default function Home() {
           >
             About Us
           </motion.h1>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col lg:gap-3 gap-12 ">
             {aboutme.map((item, index) => (
               <motion.div
                 initial={{ opacity: 0, x: -150 }}
@@ -425,16 +439,16 @@ export default function Home() {
                   transition: {
                     type: "spring",
                     stiffness: 220,
-                    duration: 0.5,
+                    duration: 0.4,
                     delay: 1 * index,
-                    staggerChildren: 0.5,
+                    staggerChildren: 0.1,
                   },
                 }}
                 viewport={{ once: true, amount: 0.5 }}
                 key={index}
                 className="text-lg text-[#a4d8e9] leading-relaxed"
               >
-                <div className="flex justify-center items-center gap-5">
+                <div className="flex flex-col lg:flex-row justify-center items-center gap-5">
                   <motion.span
                     initial={{
                       boxShadow: "0px 0px 4px 4px rgba(37, 99, 235, 1)",
@@ -447,7 +461,7 @@ export default function Home() {
                       ease: "easeIn",
                       repeat: Infinity,
                     }}
-                    className="flex items-center justify-center text-xl px-4 py-2 rounded-full text-white bg-blue-600"
+                    className="flex flex-col items-center justify-center text-xl px-4 py-2 rounded-full text-white bg-blue-600"
                   >
                     {index + 1}
                   </motion.span>{" "}
@@ -459,7 +473,8 @@ export default function Home() {
         </motion.div>
       </div>
       {/* Skill section */}
-      <div className="h-[100vh] overflow-hidden min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c] ">
+      <div className=" overflow-x-hidden  min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c] ">
+        {/* moving text */}
         <motion.div
           initial={{ x: "100%" }}
           animate={{ x: "-200%" }}
@@ -486,72 +501,69 @@ export default function Home() {
             </motion.h1>
           ))}
         </motion.div>
-        <div
-          ref={aboutref}
-          className="flex items-center flex-col justify-center gap-10"
-        >
+        <div ref={aboutref} className="flex flex-col justify-center gap-10">
           <motion.h1
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1, rotate: [40, -40, 0] }}
             viewport={{ once: true, amount: 1 }}
-            className="text-5xl mt-16 mx-auto font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
+            className="lg:text-5xl text-4xl mt-16 mx-auto font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
           >
             Skills And Expertise
           </motion.h1>
           <motion.div
             style={{ x: x }}
-            className="flex overflow-hidden items-center justify-center flex-wrap w-1/2 gap-5"
+            className="flex  items-center justify-center flex-wrap lg:w-1/2  gap-5 mx-4 mb-4 lg:mb-0 lg:mx-0"
           >
-            <AnimatePresence>
-              {images.map((item, index) => (
-                <motion.div
-                  key={item}
-                  ref={(element) => (cardRefs.current[index] = element)}
-                  initial={{ opacity: 0, y: 100 }} // Initial state, cards start from below
-                  whileInView={{ opacity: 1, y: 0 }} // Animate to full opacity and original position
-                  transition={{ duration: 1, delay: index * 0.3 }} // Add a delay to stagger the animations
-                  exit={{ opacity: 0, y: 50 }} // Animate card out of view when it exits
-                  viewport={{ once: true, amount: 1 }}
-                  onMouseEnter={() => {
-                    setCursorVariant("link");
-                  }}
-                  onMouseLeave={() => {
-                    setCursorVariant("default");
-                  }}
-                  className="p-4 h-32 flex items-center justify-center"
-                  style={{
-                    boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
-                    backdropFilter: "blur(13px)",
-                    WebkitBackdropFilter: "blur(13px)",
-                    borderRadius: "10px",
-                    border: "2px solid rgba(255, 255, 255, 0.18)",
-                  }}
-                >
-                  <Image src={item} width={100} height={100} alt={item} />
-                </motion.div>
-              ))}
-            </AnimatePresence>
+            {images.map((item, index) => (
+              <motion.div
+                key={item}
+                ref={(element) => (cardRefs.current[index] = element)}
+                initial={{ opacity: 0, y: 100 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: index * 0.1 }}
+                exit={{ opacity: 0, y: 50 }}
+                viewport={{ once: true, amount: 0.8 }}
+                onMouseEnter={() => {
+                  setCursorVariant("link");
+                }}
+                onMouseLeave={() => {
+                  setCursorVariant("default");
+                }}
+                className="p-4 h-32 flex items-center justify-center"
+                style={{
+                  boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+                  backdropFilter: "blur(13px)",
+                  WebkitBackdropFilter: "blur(13px)",
+                  borderRadius: "10px",
+                  border: "2px solid rgba(255, 255, 255, 0.18)",
+                }}
+              >
+                <div className="relative lg:w-24 lg:h-24 w-[90px] h-20 ">
+                  <Image src={item} fill={true} alt={item} />
+                </div>
+              </motion.div>
+            ))}
           </motion.div>
           ;
         </div>
       </div>
       {/* services section */}
-      <div className="h-screen bg-gradient-to-r from-[#203a43] to-[#070b0c] min-w-screen flex overflow-hidden items-center flex-col justify-center  ">
+      <div className="bg-gradient-to-r from-[#203a43] to-[#070b0c] min-w-screen flex overflow-x-hidden items-center flex-col justify-center  ">
         <motion.h1
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1, rotate: [40, -40, 0] }}
           viewport={{ once: true, amount: 1 }}
-          className="text-5xl mb-10 font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
+          className="lg:text-5xl text-4xl lg:mb-10 my-5 lg:my-0 font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
         >
           What I Do
         </motion.h1>
-        <ScrollArea className="w-screen p-6 ">
+        <ScrollArea className="w-screen p-4 ">
           <motion.div className="flex gap-8" style={{ x: sevicesx }}>
             {services.map((item, index) => (
               <motion.div
                 key={item.title}
-                onMouseEnter={() => setHoveredIndex(index)} // Set the hovered index on mouse enter
-                onMouseLeave={() => setHoveredIndex(-1)} // Reset the hovered index on mouse leave
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(-1)}
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.2 }}
                 style={{
@@ -569,7 +581,7 @@ export default function Home() {
                 <h1 className="px-3 mt-2 text-xl text-bold mb-3">
                   {item.title}
                 </h1>
-               
+
                 <ul className="mb-2">
                   {item.features.map((feature) => (
                     <li
@@ -617,12 +629,13 @@ export default function Home() {
         <EmailSend />
       </div>
       {/* footer section */}
-      <footer className="min-w-screen h-14 flex items-center px-6 justify-between bg-[#6f69cd]">
+      <footer className="min-w-screen h-14 flex px-3 items-center lg:px-6 justify-between bg-[#6f69cd]">
         <div className="font-bold">Dev Hustler</div>
         <p className="font-medium ml-11">
           &copy; 2024 Your Name. All rights reserved.
         </p>
-        <div className="flex gap-3">
+        {/* social links */}
+        <div className="lg:flex gap-3 hidden">
           {[
             <FaXTwitter key="twitter" />,
             <IoLogoInstagram key="instagram" />,
@@ -709,4 +722,79 @@ const TypingText = ({ texts }: { texts: string[] }) => {
       </motion.div>
     </span>
   );
+};
+
+// mobile nav
+
+const AnimatedHamburgerButton = () => {
+  const [active, setActive] = useState(false);
+  return (
+    <MotionConfig
+      transition={{
+        duration: 0.5,
+        ease: "easeInOut",
+      }}
+    >
+      <motion.button
+        initial={false}
+        animate={active ? "open" : "closed"}
+        onClick={() => setActive((pv) => !pv)}
+        className="relative h-20 w-16 rounded-full bg-white/0 transition-colors hover:bg-white/20"
+      >
+        <motion.span
+          variants={VARIANTS.top}
+          className="absolute h-1 w-10 bg-white"
+          style={{ y: "-50%", left: "50%", x: "-50%", top: "35%" }}
+        />
+        <motion.span
+          variants={VARIANTS.middle}
+          className="absolute h-1 w-10 bg-white"
+          style={{ left: "50%", x: "-50%", top: "50%", y: "-50%" }}
+        />
+        <motion.span
+          variants={VARIANTS.bottom}
+          className="absolute h-1 w-5 bg-white"
+          style={{
+            x: "-50%",
+            y: "50%",
+            bottom: "35%",
+            left: "calc(50% + 10px)",
+          }}
+        />
+      </motion.button>
+    </MotionConfig>
+  );
+};
+
+const VARIANTS = {
+  top: {
+    open: {
+      rotate: ["0deg", "0deg", "45deg"],
+      top: ["35%", "50%", "50%"],
+    },
+    closed: {
+      rotate: ["45deg", "0deg", "0deg"],
+      top: ["50%", "50%", "35%"],
+    },
+  },
+  middle: {
+    open: {
+      rotate: ["0deg", "0deg", "-45deg"],
+    },
+    closed: {
+      rotate: ["-45deg", "0deg", "0deg"],
+    },
+  },
+  bottom: {
+    open: {
+      rotate: ["0deg", "0deg", "45deg"],
+      bottom: ["35%", "50%", "50%"],
+      left: "50%",
+    },
+    closed: {
+      rotate: ["45deg", "0deg", "0deg"],
+      bottom: ["50%", "50%", "35%"],
+      left: "calc(50% + 10px)",
+    },
+  },
 };
