@@ -44,8 +44,10 @@ export default function Home() {
   });
   const { scrollYProgress: y } = useScroll({
     target: aboutref,
-    offset: ["0 0", "1 0.5"],
+    offset: ["0.5 0", "1 0"],
   });
+
+  const x = useTransform(y, [0, 1], ["-0%", "-100%"]);
   const { scrollYProgress: aboutMe } = useScroll({
     target: aboutMeRef,
     offset: ["start end", "start start"],
@@ -57,7 +59,6 @@ export default function Home() {
   const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
   const image = useTransform(scrollYProgress, [0, 1], ["-0%", "-140%"]);
   const section = useTransform(scrollYProgress, [0, 1], ["0%", "140%"]);
-  const x = useTransform(y, [0, 1], ["-0%", "-100%"]);
   const [cursorVariant, setCursorVariant] = useState("default");
 
   useEffect(() => {
@@ -180,8 +181,8 @@ export default function Home() {
       description: "Empowering educators and learners online.",
       image: "/eductional.jpg",
       features: [
-        "Learning Management System (LMS)",
-        "Course Enrollment and Progress Tracking",
+        "Learning Management System",
+        "Course Enrollment",
         "Interactive Quizzes ",
       ],
     },
@@ -191,7 +192,7 @@ export default function Home() {
       description: "Sharing your ideas with the world.",
       image: "/blogging.jpg",
       features: [
-        "User-Friendly Content Management System",
+        "User-Friendly",
         "SEO-Optimized Blog Posts",
         "Social Sharing Integration",
       ],
@@ -236,7 +237,7 @@ export default function Home() {
         {/* navbar */}
         <motion.div
           transition={{ staggerChildren: 2 }}
-          className="min-w-screen h-20 overflow-hidden flex lg:justify-center justify-between items lg:px-8 items-center"
+          className="min-w-screen h-20 overflow-hidden flex justify-between lg:px-8 items-center"
         >
           <motion.div
             initial={{ opacity: 0, x: -150 }}
@@ -252,7 +253,7 @@ export default function Home() {
             viewport={{ once: true, amount: 1 }}
             className="flex justify-center items-center lg:gap-3"
           >
-            <div className="scale-75">
+            <div className="scale-75 lg:hidden">
               <AnimatedHamburgerButton />
             </div>
             <div className="w-10 h-10 relative object-contain">
@@ -308,7 +309,7 @@ export default function Home() {
             onMouseLeave={() => {
               setCursorVariant("default");
             }}
-            className="font-bold  lg:text-xl text-lg bg-gradient-to-br text-[#203a43] from-[#aaa7e9] to-[#e5e7e7] rounded-md p-1 px-3 mr-4 lg:mr-0"
+            className="font-bold hidden sm:block  lg:text-xl text-lg bg-gradient-to-br text-[#203a43] from-[#aaa7e9] to-[#e5e7e7] rounded-md p-1 px-3 mr-4 lg:mr-0"
           >
             Hire Now
           </motion.div>
@@ -317,9 +318,9 @@ export default function Home() {
         <motion.section
           style={{ scale: scale }}
           transition={{ staggerChildren: 0.4 }}
-          className="flex items-center flex-col justify-center mt-16 gap-2"
+          className="flex items-center flex-col justify-center lg:mt-16 gap-2 mt-24"
         >
-          <motion.span className="lg:text-2xl text-xl text-gray-400">
+          <motion.span className="lg:text-2xl sm:text-xl text-lg mx-2 text-center text-gray-400">
             {text.map((el, i) => (
               <motion.span
                 initial={{ opacity: 0 }}
@@ -335,7 +336,7 @@ export default function Home() {
             ))}
           </motion.span>
 
-          <motion.div className=" font-bold lg:text-7xl text-5xl  md:text-6xl leading-tight bg-gradient-to-br from-[#0e00e7] to-[#e5e7e7] text-center lg:w-2/3 mx-2 bg-clip-text text-transparent">
+          <motion.div className="font-bold lg:text-7xl text-4xl  sm:text-5xl md:text-6xl lg:leading-[93px] leading-normal bg-gradient-to-br from-[#0e00e7] to-[#e5e7e7] text-center lg:w-2/3 mx-5 bg-clip-text text-transparent">
             {text2.map((el, i) => (
               <motion.span
                 initial={{ opacity: 0 }}
@@ -385,7 +386,7 @@ export default function Home() {
       >
         {/* image */}
         <motion.div
-          className="mb-14 lg:mb-0"
+          className="mb-14 mx:5 lg:mx-0 lg:mb-0"
           style={{ x: scaleOfAboutMe }}
           initial={{ scale: 1 }}
           whileInView={{ y: 20 }}
@@ -398,7 +399,7 @@ export default function Home() {
         >
           <div className="relative">
             <motion.div
-              className="absolute inset-0 rounded-full shadow-lg shadow-blue-700"
+              className="absolute  inset-0 rounded-full shadow-lg shadow-blue-700"
               whileInView={{ rotate: 360 }}
               viewport={{ once: true, amount: 0.6 }}
               transition={{
@@ -406,26 +407,27 @@ export default function Home() {
                 repeat: Infinity,
               }}
             />
-            <Image
-              src="/dev 1.png"
-              alt="my image "
-              className="rounded-full"
-              width={400}
-              height={200}
-            />
+            <div className="lg:w-80 lg:h-80 w-72 h-72">
+              <Image
+                src="/dev 1.png"
+                alt="my image "
+                className="rounded-full"
+                fill={true}
+              />
+            </div>
           </div>
         </motion.div>
 
         {/* about me text */}
         <motion.div
           style={{ x: sectionOfAboutMe }}
-          className="flex mb-10 lg:mb-0 flex-col w-[80vw] justify-center items-center gap-16 lg:w-2/4"
+          className="flex mb-10 lg:mb-0 flex-col w-[80vw] justify-center  items-center lg:items-start gap-12 lg:w-2/4"
         >
           <motion.h1
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1, rotate: [40, -40, 0] }}
             viewport={{ once: true, amount: 1 }}
-            className="text-5xl ml-[55] font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
+            className="text-5xl font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
           >
             About Us
           </motion.h1>
@@ -440,7 +442,7 @@ export default function Home() {
                     type: "spring",
                     stiffness: 220,
                     duration: 0.4,
-                    delay: 1 * index,
+                    delay: 0.2 * index,
                     staggerChildren: 0.1,
                   },
                 }}
@@ -448,7 +450,7 @@ export default function Home() {
                 key={index}
                 className="text-lg text-[#a4d8e9] leading-relaxed"
               >
-                <div className="flex flex-col lg:flex-row justify-center items-center gap-5">
+                <div className="flex text-center lg:text-left flex-col lg:flex-row justify-center items-center gap-5">
                   <motion.span
                     initial={{
                       boxShadow: "0px 0px 4px 4px rgba(37, 99, 235, 1)",
@@ -473,7 +475,7 @@ export default function Home() {
         </motion.div>
       </div>
       {/* Skill section */}
-      <div className=" overflow-x-hidden  min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c] ">
+      <div className="overflow-x-hidden min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c] ">
         {/* moving text */}
         <motion.div
           initial={{ x: "100%" }}
@@ -501,18 +503,21 @@ export default function Home() {
             </motion.h1>
           ))}
         </motion.div>
-        <div ref={aboutref} className="flex flex-col justify-center gap-10">
+        <div
+          ref={aboutref}
+          className="flex flex-col justify-center lg:items-center gap-10"
+        >
           <motion.h1
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1, rotate: [40, -40, 0] }}
             viewport={{ once: true, amount: 1 }}
-            className="lg:text-5xl text-4xl mt-16 mx-auto font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
+            className="lg:text-5xl text-3xl sm:text-4xl mt-16 mx-auto font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
           >
             Skills And Expertise
           </motion.h1>
           <motion.div
             style={{ x: x }}
-            className="flex  items-center justify-center flex-wrap lg:w-1/2  gap-5 mx-4 mb-4 lg:mb-0 lg:mx-0"
+            className="flex items-center justify-center flex-wrap lg:w-1/2  gap-5 mx-4 mb-4 lg:mb-0 lg:mx-0"
           >
             {images.map((item, index) => (
               <motion.div
@@ -520,9 +525,9 @@ export default function Home() {
                 ref={(element) => (cardRefs.current[index] = element)}
                 initial={{ opacity: 0, y: 100 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: index * 0.1 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
                 exit={{ opacity: 0, y: 50 }}
-                viewport={{ once: true, amount: 0.8 }}
+                viewport={{ once: true, amount: 0.5 }}
                 onMouseEnter={() => {
                   setCursorVariant("link");
                 }}
@@ -558,34 +563,42 @@ export default function Home() {
           What I Do
         </motion.h1>
         <ScrollArea className="w-screen p-4 ">
-          <motion.div className="flex gap-8" style={{ x: sevicesx }}>
+          <motion.div className="flex gap-8 mx-7 " style={{ x: sevicesx }}>
             {services.map((item, index) => (
               <motion.div
                 key={item.title}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(-1)}
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.5 }}
                 style={{
                   boxShadow: "6px 6px 12px #2c2a52, -6px -6px 12px #b2a8ff",
                 }}
                 className="w-[300px] my-8 text-black rounded-[25px] bg-[#6f69cd] relative"
               >
-                <Image
-                  src={item.image}
-                  alt="img"
-                  height={40}
-                  width={100}
-                  className="w-[300px] h-48 rounded-t-[25px]"
-                />
-                <h1 className="px-3 mt-2 text-xl text-bold mb-3">
+                <motion.div
+                  className="overflow-hidden"
+                  animate={{ scale: hoveredIndex === index ? 1.1 : 1 }}
+                  style={{ transformOrigin: "center", overflow: "hidden" }}
+                >
+                  <Image
+                    src={item.image}
+                    alt="img"
+                    height={40}
+                    width={100}
+                    className="w-[300px] h-[200px] overflow-hidden rounded-t-[25px]"
+                  />
+                </motion.div>
+                <h1 className="px-3 my-3 text-xl text-[#f2f2f5] font-medium">
                   {item.title}
+                </h1>
+                <h1 className="px-3 my-3 text-sm text-gray-300 font-normal">
+                  {item.description}
                 </h1>
 
                 <ul className="mb-2">
                   {item.features.map((feature) => (
                     <li
-                      className="mx-3 border-[1px] text-sm  mb-3 px-3 py-1 border-slate-800 inline-block bg-[#625cb6] rounded-lg text-slate-900"
+                      className="mx-3 border-[1px] text-sm text-gray-300  mb-3 px-3 py-1 border-slate-700 inline-block bg-[#625cb6] rounded-lg "
                       key={feature}
                     >
                       {feature}
@@ -593,20 +606,19 @@ export default function Home() {
                   ))}
                 </ul>
                 {hoveredIndex === index && (
-                  <motion.div
-                    className="absolute bottom-0 left-0 right-0 h-0 bg-slate-800 rounded-[25px]"
-                    initial={{ height: 0 }}
-                    animate={{ height: "100%" }}
-                    transition={{ duration: 0.5 }}
-                    style={{ zIndex: 2 }}
+                  <motion.button
+                    initial={{ y: 100, opacity: 0, scale: 0 }}
+                    animate={{ y: 0, opacity: 1, scale: 1 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 120,
+                      duration: 0.4,
+                    }}
+                    className="bg-blue-500 text-center ml-3 mb-5 text-white px-4 py-2 rounded-md"
+                    style={{ zIndex: 5 }}
                   >
-                    <motion.button
-                      className="bg-blue-500 text-white px-4 py-2 rounded-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                      style={{ zIndex: 5 }}
-                    >
-                      View Details
-                    </motion.button>
-                  </motion.div>
+                    View Details
+                  </motion.button>
                 )}
               </motion.div>
             ))}
@@ -630,8 +642,8 @@ export default function Home() {
       </div>
       {/* footer section */}
       <footer className="min-w-screen h-14 flex px-3 items-center lg:px-6 justify-between bg-[#6f69cd]">
-        <div className="font-bold">Dev Hustler</div>
-        <p className="font-medium ml-11">
+        <div className="font-bold hidden sm:block">Dev Hustler</div>
+        <p className="font-medium lg:ml-11 ml-4 text-center ">
           &copy; 2024 Your Name. All rights reserved.
         </p>
         {/* social links */}

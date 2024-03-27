@@ -64,7 +64,7 @@ export function EmailSend() {
       <Toaster position="top-center" reverseOrder={true} />
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 w-[380px] text-white"
+        className="space-y-6 sm:w-[380px] text-white"
       >
         <FormField
           control={form.control}
