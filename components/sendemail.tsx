@@ -111,6 +111,19 @@ export function EmailSend() {
                   <SelectItem value="Eductional website development">
                     Eductional website development
                   </SelectItem>
+                  <SelectItem value="Food delivery website">
+                    Food delivery website
+                  </SelectItem>
+                  <SelectItem value="Blogging platform">
+                    Blogging platform
+                  </SelectItem>
+                  <SelectItem value="Real Estate website">
+                    Real Estate website
+                  </SelectItem>
+                  <SelectItem value="Portfolio website">
+                    Portfolio website
+                  </SelectItem>
+                  <SelectItem value="other">other</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -131,7 +144,9 @@ export function EmailSend() {
             </FormItem>
           )}
         />
-        <Button type="submit">Send</Button>
+        <Button className="bg-[#6f69cd]" type="submit">
+          Send
+        </Button>
       </form>
     </Form>
   );

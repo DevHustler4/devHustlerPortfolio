@@ -1,23 +1,8 @@
 "use client";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Image from "next/image";
 import { MdOutlineKeyboardDoubleArrowDown } from "react-icons/md";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  AnimatePresence,
-  useSpring,
-  MotionConfig,
-} from "framer-motion";
-import { ResizeObserver } from "resize-observer";
-import {
-  useEffect,
-  useState,
-  useRef,
-  useLayoutEffect,
-  useCallback,
-} from "react";
+import { motion, useScroll, useTransform, MotionConfig } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
 import VanillaTilt from "vanilla-tilt";
 import { FaXTwitter } from "react-icons/fa6";
 import { SiUpwork } from "react-icons/si";
@@ -52,13 +37,10 @@ export default function Home() {
     target: aboutMeRef,
     offset: ["start end", "start start"],
   });
-  const [hoveredIndex, setHoveredIndex] = useState(-1);
   const scaleOfAboutMe = useTransform(aboutMe, [0, 1], ["-140", "-0%"]);
   const sectionOfAboutMe = useTransform(aboutMe, [0, 1], ["140%", "0%"]);
   //first value is 0 second is 1
   const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
-  const image = useTransform(scrollYProgress, [0, 1], ["-0%", "-140%"]);
-  const section = useTransform(scrollYProgress, [0, 1], ["0%", "140%"]);
   const [cursorVariant, setCursorVariant] = useState("default");
 
   useEffect(() => {
@@ -96,10 +78,7 @@ export default function Home() {
       },
     },
   };
-  const myvariants = {
-    hidden: { opacity: 0, y: -50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.2 } },
-  };
+
   const livariants = {
     hidden: { opacity: 0, y: -50 },
     visible: { opacity: 1, y: 0 },
@@ -135,79 +114,20 @@ export default function Home() {
     });
   }, []);
 
-  const services = [
-    {
-      title: "E-commerce Website Development",
-      description: "Creating online stores that convert.",
-      image: "/ecommerce.jpg",
-      features: [
-        "Customized Shopping Cart",
-        "Seamless Checkout Experience",
-        "Product Recommendation Engine",
-      ],
-    },
-    {
-      title: "Portfolio Website Development",
-      description: "Showcasing your work in style.",
-      image: "/portfolio.jpg",
-      features: [
-        "Stunning Visual Design",
-        "Easy-to-update Portfolio Sections",
-        "Integration with Social Media.",
-      ],
-    },
-    {
-      title: "Real Estate Website Development",
-      description: "Empowering real estate professionals online.",
-      image: "/realestate.jpg",
-      features: [
-        "Property Listings Management",
-        "Virtual Tour Integration",
-        "Lead Generation Forms",
-      ],
-    },
-    {
-      title: "Food Delivery Website Development",
-      description: "Go your food to every house of your city .",
-      image: "/food.jpg",
-      features: [
-        "Event Calendar Integration",
-        "Ticket Booking System",
-        "Social Media Integration",
-      ],
-    },
-    {
-      title: "Educational Website Development",
-      description: "Empowering educators and learners online.",
-      image: "/eductional.jpg",
-      features: [
-        "Learning Management System",
-        "Course Enrollment",
-        "Interactive Quizzes ",
-      ],
-    },
+  const smoothScrollTo = (target: string) => {
+    document.querySelector(target)?.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
 
-    {
-      title: "Blogging Platform Development",
-      description: "Sharing your ideas with the world.",
-      image: "/blogging.jpg",
-      features: [
-        "User-Friendly",
-        "SEO-Optimized Blog Posts",
-        "Social Sharing Integration",
-      ],
-    },
-  ];
-
-  const sevicesx = useTransform(y, [0, 1], ["-100%", "-0%"]);
   return (
     <>
       {/* cursor styling */}
       <motion.div
         className={
           cursorVariant === "link"
-            ? "bg-transparent  link ring-4 ring-blue-500 absolute z-50 w-24 h-24  rounded-full pointer-events-none flex cursor-pointer items-center justify-center"
-            : " non-link absolute z-50 w-8 h-8  bg-blue-500 rounded-full pointer-events-none flex items-center justify-center "
+            ? "bg-transparent transition duration-200 ease-in-out link ring-4 ring-blue-500 absolute z-50 w-24 h-24  rounded-full pointer-events-none flex cursor-pointer items-center justify-center"
+            : " non-link transition duration-200 ease-in-out  absolute z-50 w-8 h-8  bg-blue-500 rounded-full pointer-events-none flex items-center justify-center "
         }
         style={{
           left:
@@ -220,9 +140,11 @@ export default function Home() {
               : mousePosition.y - 16,
           ...(cursorVariant === "link" ? {} : { mixBlendMode: "difference" }),
         }}
-        initial="hidden"
-        variants={myvariants}
-        animate="visible"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{
+          duration: 0.3,
+        }}
       >
         {cursorVariant === "link" && (
           <PiCursorClickFill className="size-6 text-blue-400" />
@@ -246,27 +168,23 @@ export default function Home() {
               x: 0,
               transition: {
                 type: "spring",
-                stiffness: 225,
-                duration: 0.4,
+                stiffness: 220,
+                duration: 0.5,
               },
             }}
             viewport={{ once: true, amount: 1 }}
-            className="flex justify-center items-center lg:gap-3"
+            className="flex justify-center items-center ml-2 gap-2 lg:gap-3"
           >
-            <div className="scale-75 lg:hidden">
-              <AnimatedHamburgerButton />
-            </div>
             <div className="w-10 h-10 relative object-contain">
               <Image src="/dev 1.png" alt="My Logo" fill={true} />
             </div>
-            <h1 className="lg:text-xl text-lg pl-2 lg:pl-0 text-white">
-              Dev Hustler
-            </h1>
+            <h1 className="lg:text-xl text-lg text-white">Dev Hustler</h1>
           </motion.div>
 
           <motion.ul className="lg:flex gap-5 hidden ">
-            {["About", "Services", "Skills", "Projects"].map((d, index) => (
+            {["About", "Services", "Skills", "Services"].map((d, index) => (
               <motion.li
+                onClick={() => smoothScrollTo(`#${d}`)}
                 className="text-lg text-white hover:text-[#aaa7e9] hover:font-semibold"
                 key={d}
                 initial="hidden"
@@ -303,13 +221,14 @@ export default function Home() {
               },
             }}
             whileHover={{ scale: 1.1 }}
+            onClick={() => smoothScrollTo(`#Contact`)}
             onMouseEnter={() => {
               setCursorVariant("link");
             }}
             onMouseLeave={() => {
               setCursorVariant("default");
             }}
-            className="font-bold hidden sm:block  lg:text-xl text-lg bg-gradient-to-br text-[#203a43] from-[#aaa7e9] to-[#e5e7e7] rounded-md p-1 px-3 mr-4 lg:mr-0"
+            className="font-bold lg:text-xl text-lg bg-gradient-to-br text-[#203a43] from-[#aaa7e9] to-[#e5e7e7] rounded-md p-1 px-3 mr-4 lg:mr-0"
           >
             Hire Now
           </motion.div>
@@ -317,7 +236,7 @@ export default function Home() {
         {/* main headline */}
         <motion.section
           style={{ scale: scale }}
-          transition={{ staggerChildren: 0.4 }}
+          transition={{ staggerChildren: 1 }}
           className="flex items-center flex-col justify-center lg:mt-16 gap-2 mt-24"
         >
           <motion.span className="lg:text-2xl sm:text-xl text-lg mx-2 text-center text-gray-400">
@@ -339,11 +258,11 @@ export default function Home() {
           <motion.div className="font-bold lg:text-7xl text-4xl  sm:text-5xl md:text-6xl lg:leading-[93px] leading-normal bg-gradient-to-br from-[#0e00e7] to-[#e5e7e7] text-center lg:w-2/3 mx-5 bg-clip-text text-transparent">
             {text2.map((el, i) => (
               <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                initial={{ opacity: 0 , y:-100}}
+                animate={{ opacity: 1 , y:0}}
                 transition={{
                   duration: 0.5,
-                  delay: i * 0.2,
+                  delay: i * 0.3,
                 }}
                 key={i}
               >
@@ -365,6 +284,7 @@ export default function Home() {
                 type: "spring",
                 stiffness: 220,
                 duration: 0.5,
+                delay:1.4
               },
             }}
             onMouseEnter={() => {
@@ -382,7 +302,8 @@ export default function Home() {
       {/* About me Section */}
       <div
         ref={aboutMeRef}
-        className="min-h-[100vh] flex flex-col lg:flex-row justify-around overflow-hidden items-center min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c]"
+        id="About"
+        className="min-h-[110vh] flex flex-col lg:flex-row justify-around overflow-hidden items-center min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c]"
       >
         {/* image */}
         <motion.div
@@ -407,7 +328,7 @@ export default function Home() {
                 repeat: Infinity,
               }}
             />
-            <div className="lg:w-80 lg:h-80 w-72 h-72">
+            <div className="lg:w-[400px] lg:h-[400px] w-72 h-72">
               <Image
                 src="/dev 1.png"
                 alt="my image "
@@ -451,20 +372,7 @@ export default function Home() {
                 className="text-lg text-[#a4d8e9] leading-relaxed"
               >
                 <div className="flex text-center lg:text-left flex-col lg:flex-row justify-center items-center gap-5">
-                  <motion.span
-                    initial={{
-                      boxShadow: "0px 0px 4px 4px rgba(37, 99, 235, 1)",
-                    }}
-                    animate={{
-                      boxShadow: "0px 0px 1px 1px rgba(37, 99, 235, 1)",
-                    }}
-                    transition={{
-                      duration: 0.6,
-                      ease: "easeIn",
-                      repeat: Infinity,
-                    }}
-                    className="flex flex-col items-center justify-center text-xl px-4 py-2 rounded-full text-white bg-blue-600"
-                  >
+                  <motion.span className="flex flex-col items-center justify-center text-xl px-4 py-2 rounded-full text-white bg-blue-600">
                     {index + 1}
                   </motion.span>{" "}
                   {item}
@@ -474,160 +382,106 @@ export default function Home() {
           </div>
         </motion.div>
       </div>
-      {/* Skill section */}
-      <div className="overflow-x-hidden min-w-screen bg-gradient-to-r from-[#203a43] to-[#070b0c] ">
+
         {/* moving text */}
-        <motion.div
-          initial={{ x: "100%" }}
-          animate={{ x: "-200%" }}
-          transition={{
-            duration: 35,
-            ease: "linear",
-            repeat: Infinity,
-          }}
-          className="whitespace-nowrap text-transparent flex gap-1  text-5xl z-20 font-bold"
-          style={{ WebkitTextStroke: "1px #aaa7e9" }}
-        >
-          {slidetext.map((item, index) => (
-            <motion.h1
-              onMouseEnter={() => {
-                setCursorVariant("link");
-              }}
-              onMouseLeave={() => {
-                setCursorVariant("default");
-              }}
-              className="hover:text-blue-400 "
-              key={index}
-            >
-              {item}
-            </motion.h1>
-          ))}
-        </motion.div>
-        <div
-          ref={aboutref}
-          className="flex flex-col justify-center lg:items-center gap-10"
-        >
-          <motion.h1
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1, rotate: [40, -40, 0] }}
-            viewport={{ once: true, amount: 1 }}
-            className="lg:text-5xl text-3xl sm:text-4xl mt-16 mx-auto font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
-          >
-            Skills And Expertise
-          </motion.h1>
+        <div className="overflow-x-hidden h-[80px]  leading-relaxed ">
           <motion.div
-            style={{ x: x }}
-            className="flex items-center justify-center flex-wrap lg:w-1/2  gap-5 mx-4 mb-4 lg:mb-0 lg:mx-0"
+            initial={{ x: "100%" }}
+            animate={{ x: "-200%" }}
+            transition={{
+              duration: 50,
+              ease: "linear",
+              repeat: Infinity,
+            }}
+            className="whitespace-nowrap text-transparent mt-3 flex items-center gap-1  text-5xl z-20 font-bold"
+            style={{ WebkitTextStroke: "1px #aaa7e9" }}
           >
-            {images.map((item, index) => (
-              <motion.div
-                key={item}
-                ref={(element) => (cardRefs.current[index] = element)}
-                initial={{ opacity: 0, y: 100 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                exit={{ opacity: 0, y: 50 }}
-                viewport={{ once: true, amount: 0.5 }}
+            {slidetext.map((item, index) => (
+              <motion.h1
                 onMouseEnter={() => {
                   setCursorVariant("link");
                 }}
                 onMouseLeave={() => {
                   setCursorVariant("default");
                 }}
-                className="p-4 h-32 flex items-center justify-center"
-                style={{
-                  boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
-                  backdropFilter: "blur(13px)",
-                  WebkitBackdropFilter: "blur(13px)",
-                  borderRadius: "10px",
-                  border: "2px solid rgba(255, 255, 255, 0.18)",
-                }}
+                className="hover:text-blue-400 "
+                key={index}
               >
-                <div className="relative lg:w-24 lg:h-24 w-[90px] h-20 ">
-                  <Image src={item} fill={true} alt={item} />
-                </div>
-              </motion.div>
+                {item}
+              </motion.h1>
             ))}
           </motion.div>
-          ;
         </div>
-      </div>
-      {/* services section */}
-      <div className="bg-gradient-to-r from-[#203a43] to-[#070b0c] min-w-screen flex overflow-x-hidden items-center flex-col justify-center  ">
+      {/* Skills section */}
+
+      <div
+        ref={aboutref}
+        className="flex flex-col justify-center  bg-gradient-to-r from-[#203a43] to-[#070b0c] lg:items-center gap-10"
+      >
         <motion.h1
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1, rotate: [40, -40, 0] }}
           viewport={{ once: true, amount: 1 }}
-          className="lg:text-5xl text-4xl lg:mb-10 my-5 lg:my-0 font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
+          className="lg:text-5xl text-3xl sm:text-4xl mt-16 mx-auto font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
+        >
+          Skills And Expertise
+        </motion.h1>
+        <motion.div
+          style={{ x: x }}
+          className="flex items-center justify-center flex-wrap lg:w-1/2  gap-5 mx-4 mb-4 lg:mb-0 lg:mx-0"
+        >
+          {images.map((item, index) => (
+            <motion.div
+              key={item}
+              ref={(element) => (cardRefs.current[index] = element)}
+              initial={{ opacity: 0, y: 100 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+              exit={{ opacity: 0, y: 50 }}
+              viewport={{ once: true, amount: 0.5 }}
+              onMouseEnter={() => {
+                setCursorVariant("link");
+              }}
+              onMouseLeave={() => {
+                setCursorVariant("default");
+              }}
+              className="p-4 h-32 flex items-center justify-center"
+              style={{
+                boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+                backdropFilter: "blur(13px)",
+                WebkitBackdropFilter: "blur(13px)",
+                borderRadius: "10px",
+                border: "2px solid rgba(255, 255, 255, 0.18)",
+              }}
+            >
+              <div className="relative lg:w-24 lg:h-24 w-[90px] h-20 ">
+                <Image src={item} fill={true} alt={item} />
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+        ;
+      </div>
+      {/* services section */}
+      <div
+        id="Services"
+        className="bg-gradient-to-r from-[#203a43] to-[#070b0c] min-w-screen flex overflow-x-hidden items-center flex-col justify-center  "
+      >
+        <motion.h1
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1, rotate: [40, -40, 0] }}
+          viewport={{ once: true, amount: 1 }}
+          className="lg:text-5xl text-4xl lg:my-12 my-5  font-semibold bg-gradient-to-br from-[#6f69cd] to-[#e5e7e7] bg-clip-text text-transparent"
         >
           What I Do
         </motion.h1>
-        <ScrollArea className="w-screen p-4 ">
-          <motion.div className="flex gap-8 mx-7 " style={{ x: sevicesx }}>
-            {services.map((item, index) => (
-              <motion.div
-                key={item.title}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(-1)}
-                transition={{ duration: 0.5 }}
-                style={{
-                  boxShadow: "6px 6px 12px #2c2a52, -6px -6px 12px #b2a8ff",
-                }}
-                className="w-[300px] my-8 text-black rounded-[25px] bg-[#6f69cd] relative"
-              >
-                <motion.div
-                  className="overflow-hidden"
-                  animate={{ scale: hoveredIndex === index ? 1.1 : 1 }}
-                  style={{ transformOrigin: "center", overflow: "hidden" }}
-                >
-                  <Image
-                    src={item.image}
-                    alt="img"
-                    height={40}
-                    width={100}
-                    className="w-[300px] h-[200px] overflow-hidden rounded-t-[25px]"
-                  />
-                </motion.div>
-                <h1 className="px-3 my-3 text-xl text-[#f2f2f5] font-medium">
-                  {item.title}
-                </h1>
-                <h1 className="px-3 my-3 text-sm text-gray-300 font-normal">
-                  {item.description}
-                </h1>
-
-                <ul className="mb-2">
-                  {item.features.map((feature) => (
-                    <li
-                      className="mx-3 border-[1px] text-sm text-gray-300  mb-3 px-3 py-1 border-slate-700 inline-block bg-[#625cb6] rounded-lg "
-                      key={feature}
-                    >
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                {hoveredIndex === index && (
-                  <motion.button
-                    initial={{ y: 100, opacity: 0, scale: 0 }}
-                    animate={{ y: 0, opacity: 1, scale: 1 }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 120,
-                      duration: 0.4,
-                    }}
-                    className="bg-blue-500 text-center ml-3 mb-5 text-white px-4 py-2 rounded-md"
-                    style={{ zIndex: 5 }}
-                  >
-                    View Details
-                  </motion.button>
-                )}
-              </motion.div>
-            ))}
-          </motion.div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
       </div>
+      <HorizontalScrollCarousel />
       {/* Contact me section */}
-      <div className="h-screen min-w-screen flex-col bg-gradient-to-r from-[#203a43] to-[#070b0c] flex overflow-hidden items-center justify-center gap-10 ">
+      <div
+        id="Contact"
+        className="h-screen min-w-screen flex-col bg-gradient-to-r from-[#203a43] to-[#070b0c] flex overflow-hidden items-center justify-center gap-10 "
+      >
         <div>
           <motion.h1
             initial={{ opacity: 0 }}
@@ -641,13 +495,13 @@ export default function Home() {
         <EmailSend />
       </div>
       {/* footer section */}
-      <footer className="min-w-screen h-14 flex px-3 items-center lg:px-6 justify-between bg-[#6f69cd]">
+      <footer className="min-w-screen flex-col-reverse gap-4 py-3 lg:flex-row flex px-3 items-center lg:px-6 justify-between bg-[#6f69cd]">
         <div className="font-bold hidden sm:block">Dev Hustler</div>
-        <p className="font-medium lg:ml-11 ml-4 text-center ">
-          &copy; 2024 Your Name. All rights reserved.
+        <p className="font-medium text-base lg:ml-11 ml-4 text-center ">
+          &copy; 2024 Dev hustler. All rights reserved.
         </p>
         {/* social links */}
-        <div className="lg:flex gap-3 hidden">
+        <div className="flex gap-3 ">
           {[
             <FaXTwitter key="twitter" />,
             <IoLogoInstagram key="instagram" />,
@@ -674,7 +528,7 @@ export default function Home() {
     </>
   );
 }
-// ================================================================================
+// typing text
 const TypingText = ({ texts }: { texts: string[] }) => {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [currentText, setCurrentText] = useState("");
@@ -736,48 +590,6 @@ const TypingText = ({ texts }: { texts: string[] }) => {
   );
 };
 
-// mobile nav
-
-const AnimatedHamburgerButton = () => {
-  const [active, setActive] = useState(false);
-  return (
-    <MotionConfig
-      transition={{
-        duration: 0.5,
-        ease: "easeInOut",
-      }}
-    >
-      <motion.button
-        initial={false}
-        animate={active ? "open" : "closed"}
-        onClick={() => setActive((pv) => !pv)}
-        className="relative h-20 w-16 rounded-full bg-white/0 transition-colors hover:bg-white/20"
-      >
-        <motion.span
-          variants={VARIANTS.top}
-          className="absolute h-1 w-10 bg-white"
-          style={{ y: "-50%", left: "50%", x: "-50%", top: "35%" }}
-        />
-        <motion.span
-          variants={VARIANTS.middle}
-          className="absolute h-1 w-10 bg-white"
-          style={{ left: "50%", x: "-50%", top: "50%", y: "-50%" }}
-        />
-        <motion.span
-          variants={VARIANTS.bottom}
-          className="absolute h-1 w-5 bg-white"
-          style={{
-            x: "-50%",
-            y: "50%",
-            bottom: "35%",
-            left: "calc(50% + 10px)",
-          }}
-        />
-      </motion.button>
-    </MotionConfig>
-  );
-};
-
 const VARIANTS = {
   top: {
     open: {
@@ -810,3 +622,145 @@ const VARIANTS = {
     },
   },
 };
+
+const HorizontalScrollCarousel = () => {
+  const targetRef = useRef<HTMLDivElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+  });
+
+  const x = useTransform(scrollYProgress, [0, 1], ["1%", "-95%"]);
+
+  return (
+    <section ref={targetRef} className="relative h-[350vh] bg-[#7d78c5]">
+      <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+        <motion.div style={{ x }} className="flex gap-10 items-center">
+          {cards.map((card) => {
+            return <Card card={card} key={card.title} />;
+          })}
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+type CardType = {
+  title: string;
+  image: string;
+  description: string;
+  features: string[];
+};
+
+const Card = ({ card }: { card: CardType }) => {
+  return (
+    <motion.div
+      key={card.title}
+      transition={{ duration: 0.5 }}
+      style={{
+        boxShadow: "6px 6px 12px #2c2a52, -6px -6px 12px #b2a8ff",
+      }}
+      className="w-[300px] z-10 my-8 group text-black rounded-[25px] bg-[#6f69cd] relative"
+    >
+      <motion.div className="overflow-hidden rounded-t-[25px]">
+        <Image
+          src={card.image}
+          alt="img"
+          height={40}
+          width={100}
+          className="w-[300px] z-0  h-[200px] rounded-t-[25px] transition ease-out duration-300  scale-100 group-hover:scale-110"
+        />
+      </motion.div>
+      <div className="m-5 flex flex-col gap-4">
+        <h1 className=" text-xl text-[#f2f2f5] font-medium">{card.title}</h1>
+        <p className=" text-sm text-gray-300 font-normal">{card.description}</p>
+
+        <ul className="mb-2">
+          {card.features.map((feature: string) => (
+            <li
+              className="border-[1px] text-sm text-gray-300  mb-3 px-3 py-1 border-slate-700 inline-block bg-[#625cb6] rounded-lg "
+              key={feature}
+            >
+              {feature}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <motion.button
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{
+          type: "spring",
+          stiffness: 100,
+          duration: 0.4,
+        }}
+        className="bg-blue-800 hidden group-hover:block text-center ml-20 text-white -mt-4  mb-2 px-4 py-2 rounded-md"
+        style={{ zIndex: 5 }}
+      >
+        View Details
+      </motion.button>
+    </motion.div>
+  );
+};
+
+const cards = [
+  {
+    title: "E-commerce Website Development",
+    description: "Creating online stores that convert.",
+    image: "/ecommerce.jpg",
+    features: [
+      "Customized Shopping Cart",
+      "Seamless Checkout Experience",
+      "Product Recommendation Engine",
+    ],
+  },
+  {
+    title: "Portfolio Website Development",
+    description: "Showcasing your work in style.",
+    image: "/portfolio.jpg",
+    features: [
+      "Stunning Visual Design",
+      "Easy-to-update Portfolio Sections",
+      "Integration with Social Media.",
+    ],
+  },
+  {
+    title: "Real Estate Website Development",
+    description: "Empowering real estate professionals online.",
+    image: "/realestate.jpg",
+    features: [
+      "Property Listings Management",
+      "Virtual Tour Integration",
+      "Lead Generation Forms",
+    ],
+  },
+  {
+    title: "Food Delivery Website Development",
+    description: "Go your food to every house of your city .",
+    image: "/food.jpg",
+    features: [
+      "Event Calendar Integration",
+      "Ticket Booking System",
+      "Social Media Integration",
+    ],
+  },
+  {
+    title: "Educational Website Development",
+    description: "Empowering educators and learners online.",
+    image: "/eductional.jpg",
+    features: [
+      "Learning Management System",
+      "Course Enrollment",
+      "Interactive Quizzes ",
+    ],
+  },
+
+  {
+    title: "Blogging Platform Development",
+    description: "Sharing your ideas with the world.",
+    image: "/blogging.jpg",
+    features: [
+      "User-Friendly",
+      "SEO-Optimized Blog Posts",
+      "Social Sharing Integration",
+    ],
+  },
+];
