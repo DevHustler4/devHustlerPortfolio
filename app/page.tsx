@@ -98,7 +98,7 @@ export default function Home() {
     "/node.png",
     "/express.png",
     "/react.png",
-    "/nextlogo.png",
+    "/nextjs.png",
   ];
 
   useEffect(() => {
